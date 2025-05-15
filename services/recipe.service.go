@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"math/rand"
 
 	"github.com/lubie-placki-be/models"
 )
@@ -12,7 +13,7 @@ var recipes = []models.Recipe{
 		ID:    "1",
 		Title: "Murzynek",
 		Image: "https://cdn.aniagotuje.com/pictures/articles/2018/03/104896-v-1000x1000.jpg",
-		Time:  models.Time{Value: 180, Unit: "m"},
+		Time:  models.Time{Value: 180, Unit: "min"},
 		Ingredients: []models.Ingredients{
 			{
 				Title: "",
@@ -45,7 +46,7 @@ var recipes = []models.Recipe{
 		ID:    "2",
 		Title: "Piernik",
 		Image: "https://wszystkiegoslodkiego.pl/storage/images/202110/piernik-weganski.jpg",
-		Time:  models.Time{Value: 250, Unit: "m"},
+		Time:  models.Time{Value: 250, Unit: "min"},
 		Ingredients: []models.Ingredients{
 			{
 				Title: "",
@@ -78,7 +79,7 @@ var recipes = []models.Recipe{
 		ID:    "3",
 		Title: "Sernik",
 		Image: "https://cdn.aniagotuje.com/pictures/articles/2018/11/165653-v-1000x1000.jpg",
-		Time:  models.Time{Value: 210, Unit: "m"},
+		Time:  models.Time{Value: 210, Unit: "min"},
 		Ingredients: []models.Ingredients{
 			{
 				Title: "ciasto kruche",
@@ -127,4 +128,12 @@ func GetRecipeById(id string) (models.Recipe, error) {
 
 func GetAllRecipes() ([]models.Recipe, error) {
 	return recipes, nil
+}
+
+func GetRandomId() (string, error) {
+	if len(recipes) == 0 {
+		return "", errors.New("no recipes")
+	}
+
+	return recipes[rand.Intn(len(recipes))].ID, nil
 }

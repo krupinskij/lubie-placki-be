@@ -12,7 +12,9 @@ func GetAllRecipes(c *gin.Context) {
 
 	if err != nil {
 		c.IndentedJSON(http.StatusNotFound, gin.H{"message": err.Error()})
+		return
 	}
+
 	c.IndentedJSON(http.StatusOK, recipes)
 }
 
@@ -22,6 +24,19 @@ func GetRecipe(c *gin.Context) {
 
 	if err != nil {
 		c.IndentedJSON(http.StatusNotFound, gin.H{"message": err.Error()})
+		return
 	}
+
 	c.IndentedJSON(http.StatusOK, recipes)
+}
+
+func GetRandomId(c *gin.Context) {
+	id, err := services.GetRandomId()
+
+	if err != nil {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": err.Error()})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, gin.H{"id": id})
 }

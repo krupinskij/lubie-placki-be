@@ -16,22 +16,26 @@ type Ingredient struct {
 	Unit     string `json:"unit"`
 }
 
-type Ingredients struct {
+type IngredientsGroup struct {
 	Title       string       `json:"title"`
 	Ingredients []Ingredient `json:"ingredients"`
 }
 
-type Methods struct {
+type Method struct {
+	Text string `json:"text"`
+}
+
+type MethodsGroup struct {
 	Title   string   `json:"title"`
-	Methods []string `json:"methods"`
+	Methods []Method `json:"methods"`
 }
 
 type Recipe struct {
-	ID          string        `json:"id"`
-	Title       string        `json:"title"`
-	Image       string        `json:"image"`
-	Time        Time          `json:"time"`
-	Ingredients []Ingredients `json:"ingredients"`
-	Methods     []Methods     `json:"methods"`
-	Author      User          `json:"author"`
+	ID                string             `json:"id"`
+	Title             string             `json:"title" valid:"required,minstringlength(10),maxstringlength(50)"`
+	Image             string             `json:"image"`
+	Time              Time               `json:"time"`
+	IngredientsGroups []IngredientsGroup `json:"ingredientsGroups"`
+	MethodsGroups     []MethodsGroup     `json:"methodsGroups"`
+	Author            User               `json:"author"`
 }

@@ -141,7 +141,7 @@ func GetRandomId() (string, error) {
 
 func CreateRecipe(newRecipe models.Recipe) (models.Recipe, error) {
 	var recipe = models.Recipe{
-		ID:                strconv.Itoa(len(recipes)),
+		ID:                strconv.Itoa(len(recipes) + 1),
 		Title:             newRecipe.Title,
 		Image:             newRecipe.Image,
 		Time:              newRecipe.Time,

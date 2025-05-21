@@ -6,13 +6,13 @@ type User struct {
 }
 
 type Time struct {
-	Value int16  `json:"value" validate:"required,min:1,max:99999"`
+	Value int    `json:"value" validate:"required,min:1,max:99999"`
 	Unit  string `json:"unit" validate:"required,maxStringLength:10"`
 }
 
 type Ingredient struct {
 	Name     string `json:"name" validate:"required,maxStringLength:50"`
-	Quantity int16  `json:"quantity" validate:"required,min:1,max:99999"`
+	Quantity int    `json:"quantity" validate:"required,min:1,max:99999"`
 	Unit     string `json:"unit" validate:"required,maxStringLength:10"`
 }
 

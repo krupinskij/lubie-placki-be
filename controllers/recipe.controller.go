@@ -52,7 +52,7 @@ func CreateRecipe(c *gin.Context) {
 	}
 
 	if message, ok := configs.Validate(newRecipe); !ok {
-		c.IndentedJSON(http.StatusAccepted, gin.H{"message": message.Message})
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": message.Message})
 		return
 	}
 

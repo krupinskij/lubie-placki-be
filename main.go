@@ -1,26 +1,17 @@
 package main
 
 import (
-	"fmt"
-
-	"github.com/lubie-placki-be/validators"
+	"github.com/gin-gonic/gin"
+	"github.com/lubie-placki-be/middlewares"
+	"github.com/lubie-placki-be/routes"
 )
 
 func main() {
-	// router := gin.Default()
-	u := validators.User{Name: "Bob", Email: "bob@mycompany.com", Address: validators.Address{Street: "Waska"}, Animals: []validators.Animal{
-		{Breed: "dog", Name: "Azor"},
-		{Breed: "cat", Name: "Pussy"},
-		{Breed: "turtle", Name: "Alexander"},
-	}}
+	router := gin.Default()
 
-	if message, ok := validators.Validate(u); !ok {
-		fmt.Println(message.Message)
-	}
+	router.Use(middlewares.CORS())
 
-	// router.Use(middlewares.CORS())
+	routes.RecipeRoutes(router)
 
-	// routes.RecipeRoutes(router)
-
-	// router.Run("localhost:8080")
+	router.Run("localhost:8080")
 }

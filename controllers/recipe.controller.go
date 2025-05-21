@@ -3,8 +3,8 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
+	"github.com/lubie-placki-be/configs"
 	"github.com/lubie-placki-be/models"
 	"github.com/lubie-placki-be/services"
 )
@@ -51,14 +51,10 @@ func CreateRecipe(c *gin.Context) {
 		return
 	}
 
-	result, err := govalidator.ValidateStruct(newRecipe)
-
-	if err != nil {
-		c.IndentedJSON(http.StatusAccepted, gin.H{"message": err.Error()})
+	if message, ok := configs.Validate(newRecipe); !ok {
+		c.IndentedJSON(http.StatusAccepted, gin.H{"message": message.Message})
 		return
 	}
-
-	println(result, newRecipe.Title)
 
 	recipe, err := services.CreateRecipe(newRecipe)
 

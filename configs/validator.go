@@ -156,12 +156,19 @@ func Validate(u any, optional_name ...string) (Message, bool) {
 
 		tag := field.Tag.Get("validate")
 
+		deep := false
+
 		if tag != "" {
 			keys := strings.SplitSeq(tag, ",")
 
 			for key := range keys {
 				re := regexp.MustCompile(`(\w*):?(\d*)?`)
 				seq := re.FindAllStringSubmatch(key, -1)[0]
+
+				if seq[1] == "deep" {
+					deep = true
+					continue
+				}
 
 				fun, ok := validatorMap[seq[1]]
 				if !ok {
@@ -176,7 +183,7 @@ func Validate(u any, optional_name ...string) (Message, bool) {
 		}
 
 		var kind = reflect.TypeOf(iface).Kind()
-		if kind == reflect.Array || kind == reflect.Slice {
+		if deep && (kind == reflect.Array || kind == reflect.Slice) {
 			for iter, item := range value.Seq2() {
 				if message, ok := Validate(item.Interface(), fmt.Sprintf("%v%v[%v]", name, field.Name, iter)); !ok {
 					return message, false
@@ -184,7 +191,7 @@ func Validate(u any, optional_name ...string) (Message, bool) {
 			}
 		}
 
-		if kind == reflect.Struct {
+		if deep && kind == reflect.Struct {
 			if message, ok := Validate(iface, fmt.Sprintf("%v%v", name, field.Name)); !ok {
 				return message, false
 			}

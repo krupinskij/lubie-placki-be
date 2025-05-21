@@ -56,12 +56,12 @@ func CreateRecipe(c *gin.Context) {
 		return
 	}
 
-	recipe, err := services.CreateRecipe(newRecipe)
+	id, err := services.CreateRecipe(newRecipe)
 
 	if err != nil {
 		c.IndentedJSON(http.StatusAccepted, gin.H{"message": err.Error()})
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, recipe)
+	c.IndentedJSON(http.StatusOK, gin.H{"id": id})
 }

@@ -35,7 +35,7 @@ type MethodsGroup struct {
 type Recipe struct {
 	ID                bson.ObjectID      `json:"id" bson:"_id,omitempty"`
 	Title             string             `json:"title" bson:"title" validate:"required,maxStringLength:50"`
-	Image             string             `json:"image" bson:"image" validate:"required,maxStringLength:200"`
+	ImageId           string             `json:"imageId" bson:"image_id" validate:"required"`
 	Time              Time               `json:"time" bson:"time" validate:"required,deep"`
 	IngredientsGroups []IngredientsGroup `json:"ingredientsGroups" bson:"ingredients_groups" validate:"required,minArrayLength:1,deep"`
 	MethodsGroups     []MethodsGroup     `json:"methodsGroups" bson:"methods_groups" validate:"required,minArrayLength:1,deep"`

@@ -13,9 +13,9 @@ import (
 var me = models.User{ID: "1", Username: "krupinskij"}
 
 func GetRecipeById(id string) (models.Recipe, error) {
-	coll := configs.DB.Collection("recipes")
-	objID, err := bson.ObjectIDFromHex(id)
+	coll := configs.Client.Database("database").Collection("recipes")
 
+	objID, err := bson.ObjectIDFromHex(id)
 	if err != nil {
 		return models.Recipe{}, err
 	}
@@ -29,7 +29,7 @@ func GetRecipeById(id string) (models.Recipe, error) {
 }
 
 func GetAllRecipes() ([]models.Recipe, error) {
-	coll := configs.DB.Collection("recipes")
+	coll := configs.Client.Database("database").Collection("recipes")
 
 	cursor, err := coll.Find(context.TODO(), bson.D{})
 	if err != nil {
@@ -45,7 +45,7 @@ func GetAllRecipes() ([]models.Recipe, error) {
 }
 
 func GetRandomId() (bson.ObjectID, error) {
-	coll := configs.DB.Collection("recipes")
+	coll := configs.Client.Database("database").Collection("recipes")
 
 	sampleStage := bson.D{
 		{Key: "$sample", Value: bson.D{
@@ -72,15 +72,14 @@ func CreateRecipe(newRecipe models.Recipe) (bson.ObjectID, error) {
 
 	var recipe = models.Recipe{
 		Title:             newRecipe.Title,
-		Image:             newRecipe.Image,
+		ImageId:           newRecipe.ImageId,
 		Time:              newRecipe.Time,
 		IngredientsGroups: newRecipe.IngredientsGroups,
 		MethodsGroups:     newRecipe.MethodsGroups,
 		Author:            me,
 	}
 
-	coll := configs.DB.Collection("recipes")
-	// recipes = append(recipes, recipe)
+	coll := configs.Client.Database("database").Collection("recipes")
 	result, err := coll.InsertOne(context.TODO(), recipe)
 	if err != nil {
 		return bson.ObjectID{}, err

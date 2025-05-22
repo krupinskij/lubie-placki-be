@@ -11,6 +11,7 @@ func main() {
 
 	router.Use(middlewares.CORS())
 
+	routes.ImageRoutes(router)
 	routes.RecipeRoutes(router)
 
 	router.Run("localhost:8080")

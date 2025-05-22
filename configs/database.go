@@ -9,7 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo/readpref"
 )
 
-func ConnectDB() *mongo.Database {
+func ConnectDB() *mongo.Client {
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
 	opts := options.Client().ApplyURI(EnvMongoURI()).SetServerAPIOptions(serverAPI)
 
@@ -24,7 +24,7 @@ func ConnectDB() *mongo.Database {
 		panic(err)
 	}
 
-	return client.Database("database")
+	return client
 }
 
-var DB *mongo.Database = ConnectDB()
+var Client *mongo.Client = ConnectDB()

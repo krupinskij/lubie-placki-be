@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/lubie-placki-be/configs"
+	"github.com/lubie-placki-be/middlewares"
 	"github.com/lubie-placki-be/models"
 	"github.com/lubie-placki-be/services"
 )
@@ -46,6 +47,10 @@ func GetRandomId(c *gin.Context) {
 }
 
 func CreateRecipe(c *gin.Context) {
+	if !middlewares.IsAuthenticated {
+		c.IndentedJSON(http.StatusUnauthorized, nil)
+	}
+
 	var newRecipe models.Recipe
 
 	if err := c.ShouldBindJSON(&newRecipe); err != nil {

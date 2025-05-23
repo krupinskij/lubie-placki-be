@@ -10,11 +10,14 @@ func Github() gin.HandlerFunc {
 		accessToken, err := c.Cookie("access-token")
 		if err != nil {
 			GithubClient = github.NewClient(nil)
+			IsAuthenticated = false
 			c.Next()
 		}
 
 		GithubClient = github.NewClient(nil).WithAuthToken(accessToken)
+		IsAuthenticated = true
 	}
 }
 
 var GithubClient *github.Client
+var IsAuthenticated bool = false

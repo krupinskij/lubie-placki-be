@@ -5,10 +5,15 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/lubie-placki-be/middlewares"
 	"github.com/lubie-placki-be/services"
 )
 
 func UploadImage(c *gin.Context) {
+	if !middlewares.IsAuthenticated {
+		c.IndentedJSON(http.StatusUnauthorized, nil)
+	}
+
 	file, _, err := c.Request.FormFile("image")
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())

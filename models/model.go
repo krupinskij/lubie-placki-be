@@ -3,8 +3,10 @@ package models
 import "go.mongodb.org/mongo-driver/v2/bson"
 
 type User struct {
-	ID       string `json:"id" bson:"id" validate:"required"`
-	Username string `json:"username" bson:"username" validate:"required"`
+	ID       bson.ObjectID `json:"id" bson:"_id,omitempty"`
+	GithubID int64         `json:"githubId" bson:"github_id"`
+	Login    string        `json:"login" bson:"login" validate:"required"`
+	Name     string        `json:"name" bson:"name" validate:"required"`
 }
 
 type Time struct {

@@ -10,7 +10,9 @@ func main() {
 	router := gin.Default()
 
 	router.Use(middlewares.CORS())
+	router.Use(middlewares.Github())
 
+	routes.AuthRoutes(router)
 	routes.ImageRoutes(router)
 	routes.RecipeRoutes(router)
 

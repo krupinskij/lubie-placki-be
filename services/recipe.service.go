@@ -10,8 +10,6 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
-var me = models.User{ID: "1", Username: "krupinskij"}
-
 func GetRecipeById(id string) (models.Recipe, error) {
 	coll := configs.Client.Database("database").Collection("recipes")
 
@@ -69,6 +67,10 @@ func GetRandomId() (bson.ObjectID, error) {
 }
 
 func CreateRecipe(newRecipe models.Recipe) (bson.ObjectID, error) {
+	me, err := GetMe()
+	if err != nil {
+		return bson.ObjectID{}, err
+	}
 
 	var recipe = models.Recipe{
 		Title:             newRecipe.Title,

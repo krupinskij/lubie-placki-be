@@ -29,6 +29,8 @@ func GetRecipe(c *gin.Context) {
 		return
 	}
 
+	c.Writer.Header().Set("Cache-Control", "max-age=3600, public")
+
 	c.IndentedJSON(http.StatusOK, recipes)
 }
 

@@ -72,5 +72,8 @@ func GetMe(c *gin.Context) {
 		return
 	}
 
+	c.Writer.Header().Set("Cache-Control", "max-age=3600, public")
+	c.Writer.Header().Set("Vary", "Cookie")
+
 	c.IndentedJSON(http.StatusOK, me)
 }

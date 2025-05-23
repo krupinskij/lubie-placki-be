@@ -37,6 +37,7 @@ func DownloadImage(c *gin.Context) {
 
 	c.Writer.Header().Add("Content-Type", contentType)
 	c.Writer.Header().Add("Content-Length", strconv.Itoa(len(buf.Bytes())))
+	c.Writer.Header().Set("Cache-Control", "max-age=36000, public")
 
 	c.Writer.Write(buf.Bytes())
 }

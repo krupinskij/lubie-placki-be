@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lubie-placki-be/configs"
@@ -11,7 +12,12 @@ import (
 )
 
 func GetAllRecipes(c *gin.Context) {
-	recipes, err := services.GetAllRecipes()
+	p := c.Query("page")
+	page, err := strconv.Atoi(p)
+	if err != nil {
+		page = 1
+	}
+	recipes, err := services.GetAllRecipes(page)
 
 	if err != nil {
 		c.IndentedJSON(http.StatusNotFound, gin.H{"message": err.Error()})

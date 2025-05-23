@@ -42,4 +42,11 @@ type Recipe struct {
 	IngredientsGroups []IngredientsGroup `json:"ingredientsGroups" bson:"ingredients_groups" validate:"required,minArrayLength:1,deep"`
 	MethodsGroups     []MethodsGroup     `json:"methodsGroups" bson:"methods_groups" validate:"required,minArrayLength:1,deep"`
 	Author            User               `json:"author" bson:"author"`
+	CreatedAt         int64              `json:"createdAt" bson:"created_at"`
+}
+
+type Paginated[TData any] struct {
+	Data       []TData `json:"data"`
+	Count      int64   `json:"count"`
+	CountPages int64   `json:"countPages"`
 }

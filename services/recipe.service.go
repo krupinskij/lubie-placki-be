@@ -3,12 +3,16 @@ package services
 import (
 	"context"
 	"errors"
+	"time"
 
 	"github.com/lubie-placki-be/configs"
 	"github.com/lubie-placki-be/models"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
+
+const LIMIT int = 10
 
 func GetRecipeById(id string) (models.Recipe, error) {
 	coll := configs.Client.Database("database").Collection("recipes")
@@ -26,20 +30,33 @@ func GetRecipeById(id string) (models.Recipe, error) {
 	return result, nil
 }
 
-func GetAllRecipes() ([]models.Recipe, error) {
+func GetAllRecipes(page int) (models.Paginated[models.Recipe], error) {
 	coll := configs.Client.Database("database").Collection("recipes")
 
-	cursor, err := coll.Find(context.TODO(), bson.D{})
+	limit := int64(LIMIT)
+	skip := int64((page - 1) * LIMIT)
+
+	filter := bson.D{}
+	opts := options.Find().SetLimit(limit).SetSkip(skip).SetSort(bson.D{{Key: "created_at", Value: -1}})
+
+	cursor, err := coll.Find(context.TODO(), filter, opts)
 	if err != nil {
-		return []models.Recipe{}, err
+		return models.Paginated[models.Recipe]{}, err
+	}
+
+	count, err := coll.CountDocuments(context.TODO(), filter)
+	if err != nil {
+		return models.Paginated[models.Recipe]{}, err
 	}
 
 	var results []models.Recipe = []models.Recipe{}
 	if err = cursor.All(context.TODO(), &results); err != nil {
-		return []models.Recipe{}, err
+		return models.Paginated[models.Recipe]{}, err
 	}
 
-	return results, nil
+	countPages := (count-1)/int64(LIMIT) + 1
+
+	return models.Paginated[models.Recipe]{Data: results, Count: count, CountPages: countPages}, nil
 }
 
 func GetRandomId() (bson.ObjectID, error) {
@@ -79,6 +96,7 @@ func CreateRecipe(newRecipe models.Recipe) (bson.ObjectID, error) {
 		IngredientsGroups: newRecipe.IngredientsGroups,
 		MethodsGroups:     newRecipe.MethodsGroups,
 		Author:            me,
+		CreatedAt:         time.Now().Unix(),
 	}
 
 	coll := configs.Client.Database("database").Collection("recipes")

@@ -64,8 +64,8 @@ func CreateRecipe(c *gin.Context) {
 		return
 	}
 
-	if message, ok := configs.Validate(newRecipe); !ok {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": message.Message})
+	if result, ok := configs.Validate(newRecipe); !ok {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": result.Message})
 		return
 	}
 
